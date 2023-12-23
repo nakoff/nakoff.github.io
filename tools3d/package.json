@@ -1,0 +1,18 @@
+{
+  "name": "tools3d",
+  "version": "0.1.0",
+  "description": "3D Tools",
+  "scripts": {
+    "dev": "servez -p 8080",
+    "start": "npm run dev"
+  },
+  "author": "mrdoob",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrdoob/three.js/issues"
+  },
+  "homepage": "https://threejs.org/",
+  "devDependencies": {
+    "servez": "^2.0.0"
+  }
+}
