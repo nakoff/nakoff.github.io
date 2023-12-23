@@ -6,6 +6,7 @@ function SidebarAnimation(editor) {
 	const strings = editor.strings;
 	const signals = editor.signals;
 	const mixer = editor.mixer;
+	let curAction;
 
 	function getButtonText(action) {
 		return action.isRunning()
@@ -29,7 +30,10 @@ function SidebarAnimation(editor) {
 
 		const button = new UIButton(getButtonText(action));
 		button.onClick(function() {
+			if (curAction) curAction.paused = false;
 			action.isRunning() ? action.stop() : action.play();
+			if (action.isRunning()) curAction = action;
+			// curAction = action.isRunning() ? action : undefined;
 			button.setTextContent(getButtonText(action));
 		});
 
@@ -68,6 +72,13 @@ function SidebarAnimation(editor) {
 		}
 
 		return parent;
+	}
+
+	signals.sceneRendered.add(updateFrametime);
+	function updateFrametime(frametime) {
+		if (!curAction) return;
+		animTime.setValue(curAction.time);
+
 	}
 
 	function createEventUI(parent, id, animation, eventName = null, eventTime = null) {
@@ -208,8 +219,23 @@ function SidebarAnimation(editor) {
 		mixer.timeScale = mixerTimeScaleNumber.getValue();
 	});
 
-	mixerTimeScaleRow.add(new UIText(strings.getKey('sidebar/animations/timescale')).setWidth('90px'));
+	const animTime = new UINumber(0).setWidth('60px').setRange(0, 10);
+	const pauseBtn = new UIButton('Pause');
+	pauseBtn.onClick(function() {
+		if (!curAction) return;
+		curAction.paused = !curAction.paused;
+	})
+	animTime.onChange(function() {
+		if (!curAction) return;
+		curAction.time = animTime.getValue();
+	});
+
+	mixerTimeScaleRow.add(new UIText(strings.getKey('sidebar/animations/timescale')).setWidth('210px'));
 	mixerTimeScaleRow.add(mixerTimeScaleNumber);
+	mixerTimeScaleRow.add(new UIBreak());
+	mixerTimeScaleRow.add(new UIText('Time'));
+	mixerTimeScaleRow.add(animTime);
+	mixerTimeScaleRow.add(pauseBtn);
 	container.add(mixerTimeScaleRow);
 
 	const tab = new UITabbedPanel();
