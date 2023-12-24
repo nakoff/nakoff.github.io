@@ -24,24 +24,25 @@ function SidebarAnimation(editor) {
 		const container = new UIRow();
 		parent.add(container);
 
-		const name = new UIText(animation.name);
-		name.setWidth('200px');
-		container.add(name);
-
 		const button = new UIButton(getButtonText(action));
+		container.add(button);
 		button.onClick(function() {
 			if (curAction) curAction.paused = false;
 			action.isRunning() ? action.stop() : action.play();
 			if (action.isRunning()) curAction = action;
-			// curAction = action.isRunning() ? action : undefined;
 			button.setTextContent(getButtonText(action));
 		});
 
-		container.add(button);
 
 		const newEvent = new UIButton('+');
 		container.add(new UIBreak().setWidth('5px'));
 		container.add(newEvent);
+		container.add(new UIBreak().setWidth('5px'));
+
+		const name = new UIText(animation.name);
+		name.setWidth('200px');
+		container.add(name);
+
 		let panel;
 
 		newEvent.onClick(function() {
@@ -49,6 +50,7 @@ function SidebarAnimation(editor) {
 				panel = new UIPanel();
 				parent.add(panel);
 			}
+			panel.setDisplay('block');
 
 			const id = getUnicId();
 			createEventData(animation.name, id);
@@ -74,12 +76,10 @@ function SidebarAnimation(editor) {
 		return parent;
 	}
 
-	signals.sceneRendered.add(updateFrametime);
-	function updateFrametime(frametime) {
+	signals.sceneRendered.add(function(frametime) {
 		if (!curAction) return;
 		animTime.setValue(curAction.time);
-
-	}
+	});
 
 	function createEventUI(parent, id, animation, eventName = null, eventTime = null) {
 		const row = new UIRow();
@@ -96,8 +96,11 @@ function SidebarAnimation(editor) {
 			row.clear();
 			parent.remove(row);
 			const id = Number(row.getId());
-			const lastEvents = removeEventData(animation.name, id);
-			if (lastEvents === 0) parent.clear();
+			const leftEvents = removeEventData(animation.name, id);
+			if (leftEvents === 0) {
+				parent.setDisplay('none');
+				parent.clear();
+			}
 		});
 
 		input.onChange(function() {
@@ -116,6 +119,8 @@ function SidebarAnimation(editor) {
 		row.add(time);
 		row.add(new UIBreak().setWidth('5px'));
 		row.add(remove);
+
+		return remove;
 	}
 
 	function createEventData(animationName, eventId) {

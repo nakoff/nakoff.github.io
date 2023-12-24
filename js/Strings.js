@@ -1,6 +1,6 @@
-function Strings( config ) {
+function Strings(config) {
 
-	const language = config.getKey( 'language' );
+	const language = config.getKey('language');
 
 	const values = {
 
@@ -89,9 +89,9 @@ function Strings( config ) {
 			'sidebar/scene/environment': 'Environment',
 			'sidebar/scene/fog': 'Fog',
 
-			'sidebar/properties/object': 'Object',
-			'sidebar/properties/geometry': 'Geometry',
-			'sidebar/properties/material': 'Material',
+			'sidebar/properties/object': 'Obj',
+			'sidebar/properties/geometry': 'Geom',
+			'sidebar/properties/material': 'Matrl',
 			'sidebar/properties/script': 'Script',
 
 			'sidebar/object/type': 'Type',
@@ -1054,9 +1054,9 @@ function Strings( config ) {
 
 	return {
 
-		getKey: function ( key ) {
+		getKey: function(key) {
 
-			return values[ language ][ key ] || '???';
+			return values[language][key] || '???';
 
 		}
 
