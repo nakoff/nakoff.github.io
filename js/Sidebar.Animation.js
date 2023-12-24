@@ -224,6 +224,7 @@ function SidebarAnimation(editor) {
 	pauseBtn.onClick(function() {
 		if (!curAction) return;
 		curAction.paused = !curAction.paused;
+		animTime.setRange(0, curAction._clip.duration);
 	})
 	animTime.onChange(function() {
 		if (!curAction) return;
