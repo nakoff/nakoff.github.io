@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monster Lab PvP - Loading Timeline</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -43,8 +44,47 @@
             gap: 60px;
         }
 
-        .text-block {
-            margin: 0;
+        .text-block img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* ПОРТРЕТНЫЙ РЕЖИМ (мобильные) - показываем img */
+        @media (max-width: 768px) {
+            .text-block img {
+                display: block;
+            }
+        }
+
+        /* АЛЬБОМНЫЙ РЕЖИМ (десктоп) - используем псевдоэлемент */
+        @media (min-width: 769px) {
+            .text-block img {
+                display: none;
+            }
+
+            .text-block picture::after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 60px;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+
+            .main-text picture::after {
+                background-image: url('./Assets/albom/en.png');
+            }
+
+            .secondary-text picture::after {
+                background-image: url('./Assets/albom/jp.png');
+            }
+
+            .tertiary-text picture::after {
+                background-image: url('./Assets/albom/ru.png');
+            }
         }
 
         .main-text {
@@ -58,7 +98,6 @@
         .secondary-text {
             font-size: 24px;
             font-weight: 500;
-            line-height: 1.4;
             opacity: 0.95;
             font-family: 'Noto Sans JP', 'Space Grotesk', sans-serif;
         }
@@ -66,7 +105,6 @@
         .tertiary-text {
             font-size: 22px;
             font-weight: 500;
-            line-height: 1.4;
             opacity: 0.95;
         }
 
@@ -96,8 +134,7 @@
         .progress-bar {
             height: 100%;
             background: #00ff88;
-            width: 0%;
-            animation: loading 3s ease-in-out infinite;
+            width: 35%;
             position: relative;
             box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
         }
@@ -111,7 +148,7 @@
             bottom: 0;
             background: linear-gradient(90deg,
                 transparent 0%,
-                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255,255,255,0.3) 50%,
                 transparent 100%);
             animation: shimmer 2s infinite;
         }
@@ -122,9 +159,9 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                #00ff88 50%, 
+            background: linear-gradient(90deg,
+                transparent 0%,
+                #00ff88 50%,
                 transparent 100%);
             animation: scan 4s linear infinite;
             opacity: 0.3;
@@ -138,141 +175,68 @@
             width: 100%;
             height: 100%;
             background-image: 
-                repeating-linear-gradient(0deg, 
-                    rgba(0, 255, 136, 0.03) 0px, 
-                    transparent 1px, 
-                    transparent 2px, 
-                    rgba(0, 255, 136, 0.03) 3px);
+                repeating-linear-gradient(0deg,
+                    rgba(0,255,136,0.03) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(0,255,136,0.03) 3px);
             pointer-events: none;
             opacity: 0.1;
         }
 
         @keyframes glow {
             from {
-                text-shadow: 0 0 20px rgba(0, 255, 136, 0.5),
-                             0 0 40px rgba(0, 255, 136, 0.3);
+                text-shadow: 0 0 20px rgba(0,255,136,0.5),
+                             0 0 40px rgba(0,255,136,0.3);
             }
             to {
-                text-shadow: 0 0 30px rgba(0, 255, 136, 0.8),
-                             0 0 60px rgba(0, 255, 136, 0.4);
-            }
-        }
-
-        @keyframes loading {
-            0% {
-                width: 0%;
-            }
-            50% {
-                width: 70%;
-            }
-            100% {
-                width: 0%;
+                text-shadow: 0 0 30px rgba(0,255,136,0.8),
+                             0 0 60px rgba(0,255,136,0.4);
             }
         }
 
         @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(200%);
-            }
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
         }
 
         @keyframes scan {
-            0% {
-                transform: translateY(0);
-            }
-            100% {
-                transform: translateY(100vh);
-            }
-        }
-
-        /* Десктопная версия */
-        @media (min-width: 769px) {
-            .container {
-                max-width: 1200px;
-                padding: 60px;
-            }
-
-            .text-block {
-                margin-bottom: 0;
-            }
-
-            .text-content {
-                gap: 40px;
-            }
-
-            .text-content {
-                gap: 50px;
-            }
-
-            .main-text {
-                font-size: clamp(32px, 4vw, 48px);
-            }
-
-            .secondary-text {
-                font-size: clamp(28px, 3.5vw, 40px);
-            }
-
-            .tertiary-text {
-                font-size: clamp(26px, 3vw, 36px);
-            }
-
-            .progress-container {
-                padding-bottom: 0;
-                margin-top: 80px;
-            }
-
-            .progress-bar-wrapper {
-                max-width: 600px;
-                height: 40px;
-            }
-
-            .progress-label {
-                font-size: 20px;
-                margin-bottom: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-text {
-                font-size: 24px;
-            }
-
-            .secondary-text {
-                font-size: 20px;
-            }
-
-            .tertiary-text {
-                font-size: 19px;
-            }
-
-            .text-block {
-                margin-bottom: 50px;
-            }
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
         }
     </style>
 </head>
+
 <body>
     <div class="noise"></div>
     <div class="scanline"></div>
-    
+
     <div class="container">
         <div class="text-content">
+
             <div class="text-block main-text">
-                This connection hasn't reached your timeline... yet.
+                <picture>
+                    <source media="(min-width: 769px)" srcset="./Assets/albom/en.png">
+                    <img src="./Assets/portret/en.png" alt="">
+                </picture>
             </div>
-            
+
             <div class="text-block secondary-text">
-                この接続は皆さんのタイムラインには到達していません... まだです。
+                <picture>
+                    <source media="(min-width: 769px)" srcset="./Assets/albom/jp.png">
+                    <img src="./Assets/portret/jp.png" alt="">
+                </picture>
             </div>
-            
+
             <div class="text-block tertiary-text">
-                Это соединение не достигло вашего таймлайна... пока что.
+                <picture>
+                    <source media="(min-width: 769px)" srcset="./Assets/albom/ru.png">
+                    <img src="./Assets/portret/ru.png" alt="">
+                </picture>
             </div>
+
         </div>
-        
+
         <div class="progress-container">
             <div class="progress-label">??</div>
             <div class="progress-bar-wrapper">
@@ -282,13 +246,10 @@
     </div>
 
     <script>
-        // Добавляем небольшие случайные глитчи
         setInterval(() => {
             if (Math.random() > 0.95) {
-                document.body.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
-                setTimeout(() => {
-                    document.body.style.transform = 'translate(0, 0)';
-                }, 50);
+                document.body.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
+                setTimeout(() => document.body.style.transform = 'translate(0,0)', 50);
             }
         }, 100);
     </script>
